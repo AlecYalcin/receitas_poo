@@ -17,11 +17,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: NewAppBar(),
-        body: const newBody(),
-        bottomNavigationBar: NewBottomNavigationBar(icons: const [
-          Icon(Icons.coffee_outlined),
-          Icon(Icons.local_drink_outlined),
-        ]),
+        body: ListView(
+          children: const [
+           newBody(),
+          ]
+        ),
+        bottomNavigationBar: NewBottomNavigationBar(icons: lista_icone),
       ),
     );
   }
@@ -52,13 +53,13 @@ class NewAppBar extends AppBar {
 }
 
 class NewBottomNavigationBar extends StatelessWidget {
-  List<Icon> icons;
+  List<BottomIcon> icons;
   NewBottomNavigationBar({super.key, this.icons = const[]});
 
-  BottomNavigationBarItem processIcon(Icon icon) {
+  BottomNavigationBarItem processIcon(BottomIcon icon) {
     return BottomNavigationBarItem(
-      label: "Botão",
-      icon: icon
+      label: icon.nome,
+      icon: icon.icone
     );
   }
 
@@ -75,20 +76,34 @@ class newBody extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
-    return BodyText(objects: lista_cerveja);
+    return BodyText(objects: dataObjects);
   }
 }
 
 class BodyText extends StatelessWidget {
-  List<Cerveja> objects;
+  List objects;
   BodyText({super.key, this.objects = const[]});
 
   @override
   Widget build(BuildContext context) {
-    List<Expanded> allTexts = objects.map((obj) => Expanded(
-      child: Center(child: Text("${obj.nome} - ${obj.estilo} - ${obj.ibu}")),
-    )).toList();
-    return Column(children: allTexts);
+    var columnNames = ["Nome", "Estilo", "IBU"];
+    var propertyNames = ["name","style","ibu"];
+
+    return DataTable(
+      columns: columnNames.map(
+        (name) => DataColumn(
+          label: Expanded(
+            child: Text(name, style: const TextStyle(fontStyle: FontStyle.italic))),
+        )
+      ).toList(),
+      rows: objects.map(
+        (obj) => DataRow(
+          cells: propertyNames.map(
+            (property) => DataCell(Text(obj[property]))
+          ).toList()
+        )
+      ).toList()
+    );
   }
 }
 
@@ -100,10 +115,72 @@ class Cerveja {
   Cerveja(this.nome, this.estilo, this.ibu);
 }
 
-List<Cerveja> lista_cerveja = [
-  Cerveja("La Fin Du Monde","Bock","65"),
-  Cerveja("Sapporo Premiume","Sour Ale","54"),
-  Cerveja("Duvel","Pilsner","82"),
-  Cerveja("Duvel","Pilsner","82"),
-  Cerveja("Duvel","Pilsner","82"),
+class BottomIcon {
+  String nome;
+  Icon icone;
+
+  BottomIcon(this.nome, this.icone);
+}
+
+var dataObjects = [
+    {
+      "name": "La Fin Du Monde",
+      "style": "Bock",
+      "ibu": "65"
+    },
+    {
+      "name": "Sapporo Premiume",
+      "style": "Sour Ale",
+      "ibu": "54"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    },
+    {
+      "name": "Duvel", 
+      "style": "Pilsner", 
+      "ibu": "82"
+    }
+];
+
+List<BottomIcon> lista_icone = [
+  BottomIcon("Café",const Icon(Icons.coffee_outlined)),
+  BottomIcon("Cerveja",const Icon(Icons.local_drink_outlined)),
 ];
